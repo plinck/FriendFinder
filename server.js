@@ -1,6 +1,5 @@
 // Dependencies
 const express    = require("express");
-const path       = require("path");
 const bodyParser = require("body-parser");
 
 const app  = express();
@@ -11,15 +10,13 @@ app.use(bodyParser.json());
 app.use(bodyParser.text());
 app.use(bodyParser.urlencoded({"extended": true}));
 
-const router_html = require(path.join(__dirname, "app", "routes", "htmlRoutes.js"));
-const router_api  = require(path.join( __dirname, "app", "routes", "apiRoutes.js"));
+const router_html = require(`${__dirname}/app/routes/htmlRoutes.js`);
+const router_api  = require(`${__dirname}/app/routes/apiRoutes.js`);
 
-app.use("/",path.join(__dirname, "app", "routes", "htmlRoutes.js"));
-app.use("/api", path.join( __dirname, "app", "routes", "apiRoutes.js"));
+app.use("/", router_html);
+app.use("/api", router_api);
 
 //Listen
 app.listen(PORT, () => {
-    let host = server.address().hostname;
-
-    console.log(`App listening on at http://${host}:${PORT}`)
+    console.log(`App listening on port ${PORT}`)
 });
