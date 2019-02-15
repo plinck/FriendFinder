@@ -4,7 +4,7 @@ USE friend_finder_db;
 
 DROP TABLE IF EXISTS friends;
 
-/* ClearDB doesn't support JSON type yet, so we use CHAR(21) instead. */
+-- Store the answers as JSON string in database
 CREATE TABLE friends (
     id        INT AUTO_INCREMENT NOT NULL,
     name      VARCHAR(30) NOT NULL,

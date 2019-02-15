@@ -5,7 +5,7 @@ const validUrl = require("valid-url");
 const router = express.Router();
 
 // Create an instance of FriendFinder
-const FriendFinder = require(`${__dirname}/../data/friends.js`);
+const FriendFinder = require(`${__dirname}/../data/FriendFinder.js`);
 const friendFinder = new FriendFinder();
 
 // Display all friends
