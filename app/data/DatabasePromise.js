@@ -40,13 +40,3 @@ class Database {
 }
 
 module.exports = Database;
-
-// // test
-// let database = new Database();
-
-// database.query("SELECT * FROM products")
-//     .then(rows => {
-//         console.log(rows);
-//         // do something with the result
-//     });
-// database.close();

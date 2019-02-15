@@ -1,4 +1,4 @@
-const express  = require("express");
+const express = require("express");
 const validUrl = require("valid-url");
 const path = require('path');
 
@@ -17,20 +17,20 @@ router.get("/friends", (req, res) => {
 // Find the most compatible friend
 router.post("/friends", (req, res) => {
     const profile = {
-        "name"     : req.body.name,
+        "name": req.body.name,
         "photo_url": (validUrl.isUri(req.body.photo_url)) ? req.body.photo_url : "",
-        "answers"  : req.body.answers.map(a => parseInt(a))
+        "answers": req.body.answers.map(a => parseInt(a))
     };
-    
+
     const friend = friendFinder.findBestFriend(profile);
 
     // Add the user's profile to the database
     friendFinder.addFriend(profile);
-    
+
     res.send({
-        "my_name"         : profile.name,
-        "friend_name"     : friend.name,
-        "friend_photo_url": friend.photo_url
+        "my_name": profile.name,
+        "name": friend.name,
+        "photo_url": friend.photo_url
     });
 });
 
