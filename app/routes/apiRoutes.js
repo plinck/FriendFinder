@@ -1,11 +1,12 @@
 const express  = require("express");
 const validUrl = require("valid-url");
+const path = require('path');
 
 // Create an instance of Router
 const router = express.Router();
 
 // Create an instance of FriendFinder
-const FriendFinder = require(`${__dirname}/../data/FriendFinder.js`);
+const FriendFinder = require(path.join(__dirname, `/../data/FriendFinder.js`));
 const friendFinder = new FriendFinder();
 
 // Display all friends
