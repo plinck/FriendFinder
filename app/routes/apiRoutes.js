@@ -14,6 +14,17 @@ router.get("/friends", (req, res) => {
     res.json(friendFinder.getFriends());
 });
 
+// Display friends in Order of Closeness
+router.post("/friendsCloseness", (req, res) => {
+    const profile = {
+        "name": req.body.name,
+        "photo_url": (validUrl.isUri(req.body.photo_url)) ? req.body.photo_url : "",
+        "answers": req.body.answers.map(a => parseInt(a))
+    };
+
+    res.json(friendFinder.getClosestFriendsInOrder(profile));
+});
+
 // Find the most compatible friend
 router.post("/friends", (req, res) => {
     const profile = {
@@ -22,15 +33,16 @@ router.post("/friends", (req, res) => {
         "answers": req.body.answers.map(a => parseInt(a))
     };
 
-    const friend = friendFinder.findBestFriend(profile);
+    const friendWithScore = friendFinder.findBestFriend(profile);
 
-    // Add the user's profile to the database
+    // Add the user's profile to the datastore
     friendFinder.addFriend(profile);
 
     res.send({
         "my_name": profile.name,
-        "name": friend.name,
-        "photo_url": friend.photo_url
+        "name": friendWithScore.name,
+        "photo_url": friendWithScore.photo_url,
+        "score": friendWithScore.score
     });
 });
 
