@@ -20,7 +20,18 @@
 
 <body>
     <div class="container">
-        <h2>Survey Questions</h2>
+        <div class="jumbotron">
+            <h1><i class="fa fa-facebook-square" aria-hidden="true"></i> Friend Finder</h1>
+            <h2>Survey Questions - Please answer all questions</h2>
+            <br>
+            <div>
+                <a href="/">
+                    <button type="button" class="btn btn-lg btn-primary">
+                        <h4><span class="glyphicon glyphicon-home-alt"></span>Home</h4>
+                    </button>
+                </a>
+            </div>
+        </div>
         <hr>
 
         <h3><strong>About You</strong></h3>
@@ -31,18 +42,21 @@
         <input type="text" id="photo" class="form-control" required>
 
         <hr>
-
-        <!-- All  -->
-        <h3>You must answer all questions</h3>
         <div id="questions"></div>
-
         <br>
         <br>
-
-        <!-- Submit Button -->
-        <button type="submit" class="btn btn-primary btn-lg btn-block" id="submit"><i class="fa fa-check-circle"
-                aria-hidden="true"></i>
-            Submit</button>
+        <!-- Show closest -->
+        <button type="submit" class="btn btn-primary" id="submit">
+            <i class="fa fa-check-circle" aria-hidden="true">
+            </i>
+            Show Closest Match
+        </button>
+        <!-- Show ALL  -->
+        <button type="submit" class="btn btn-secondary" id="submitShowALL">
+            <i class="fa fa-check-circle" aria-hidden="true">
+            </i>
+            Show ALL by Closeness
+        </button>
 
         <hr>
         <footer class="footer">
@@ -50,7 +64,6 @@
                 <p>
                     <a href="/api/friends">API Friends List</a> |
                     <a href="https://github.com/plinck/friendfinder">GitHub Repo</a> |
-                    <a href="#" id="getOrder">Log All Friends In Order of closeness</a> |
                 </p>
 
             </div>
@@ -58,9 +71,59 @@
 
     </div>
 
-    <!-- Modal DIALOG SHOW/HIDE -->
-    <div id="results-modal" class="modal fade" role="dialog">
-        <div class="modal-dialog">
+    <!-- Bootstrap Modal Dialog for All Friends in Order of Closeness -->
+    <!-- See https://getbootstrap.com/docs/4.0/components/modal/ -->
+    <div id="modal-dialog-list" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-dialog-centered">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h2 class="modal-title"><strong>All Matches by Score</strong></h2>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-sm-4">Name</div>
+                            <div class="col-sm-4">Score</div>
+                            <div class="col-sm-4">Image</div>
+                        </div>
+                        <div id="all-friends">
+                            <div class="row">
+                                <div id="match-name-list" class="col-sm-4">----</div>
+                                <div id="match-score-list" class="col-sm-4">----</div>
+                                <div class="col-sm-4">
+                                    <img id="match-img-list" src="" alt="">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div id="match-name-list" class="col-sm-4">----</div>
+                                <div id="match-score-list" class="col-sm-4">----</div>
+                                <div class="col-sm-4">
+                                    <img id="match-img-list" src="" alt="">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div id="match-name-list" class="col-sm-4">----</div>
+                                <div id="match-score-list" class="col-sm-4">----</div>
+                                <div class="col-sm-4">
+                                    <img id="match-img-list" src="" alt="">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap Modal Dialog for Closest Friend -->
+    <!-- See https://getbootstrap.com/docs/4.0/components/modal/ -->
+    <div id="results-modal-dialog" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-dialog-centered">
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
@@ -68,11 +131,10 @@
                     <h2 class="modal-title"><strong>Best Match</strong></h2>
                 </div>
                 <div class="modal-body">
-                    <h2><span>Match Name: </span> <span>id="match-name"></span></h2>
-                    <h2><span>Match Score: </span> <span>id="match-score"></span></h2>
+                    <h2><span>Match Name: </span> <span id="match-name"></span></h2>
+                    <h2><span>Match Score: </span> <span id="match-score"></span></h2>
                     <h2><span>Match Image</h2>
-                    <img id="match-img" src="https://media.licdn.com/mpr/mpr/shrinknp_400_400/p/6/005/064/1bd/3435aa3.jpg"
-                        alt="nada">
+                    <img id="match-img" src="" alt="">
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

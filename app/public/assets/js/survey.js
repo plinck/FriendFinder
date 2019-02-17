@@ -1,70 +1,25 @@
 "use strict";
 
-// Capture the form inputs
-$("#submit").on("click", function (event) {
-    event.preventDefault();
+// Form validation
+function validateForm() {
+    let isValid = true;
+    $(".form-control").each(function () {
+        if ($(this).val() === "") {
+            isValid = false;
+        }
+    });
 
-    // Form validation
-    function validateForm() {
-        var isValid = true;
-        $(".form-control").each(function () {
-            if ($(this).val() === "") {
-                isValid = false;
-            }
-        });
+    $(".chosen-select").each(function () {
+        if ($(this).val() === "") {
+            isValid = false;
+        }
+    });
+    return isValid;
+}
 
-        $(".chosen-select").each(function () {
-            if ($(this).val() === "") {
-                isValid = false;
-            }
-        });
-        return isValid;
-    }
-
-    // If all required fields are filled
-    if (validateForm()) {
-        // Create an object for the user"s data
-        var userData = {
-            name: $("#name").val(),
-            photo_url: $("#photo").val(),
-            answers: [
-                $("#q1").val(),
-                $("#q2").val(),
-                $("#q3").val(),
-                $("#q4").val(),
-                $("#q5").val(),
-                $("#q6").val(),
-                $("#q7").val(),
-                $("#q8").val(),
-                $("#q9").val(),
-                $("#q10").val()
-            ]
-        };
-
-        // AJAX post the data to the friends API.
-        $.post("/api/friends", userData, function (data) {
-
-            // Grab the result from the AJAX post so that the best match's name and photo are displayed.
-            $("#match-name").text(data.name);
-            $("#match-score").text(data.score);
-            $("#match-img").attr("src", data.photo_url);
-
-            // Show the bootstrap modal dialog with the best match
-            $("#results-modal").modal("toggle");
-
-        });
-    } else {
-        alert("Please fill out all fields before submitting!");
-    }
-});
-
-
-$("#getOrder").on("click", function (event) {
-    event.preventDefault();
-
-    // If all required fields are filled
-    // Create an object for the user"s data
-    var userData = {
+// Extract form data
+function getFormData() {
+    let formData = {
         name: $("#name").val(),
         photo_url: $("#photo").val(),
         answers: [
@@ -80,18 +35,71 @@ $("#getOrder").on("click", function (event) {
             $("#q10").val()
         ]
     };
+    return formData;
+}
 
-    // AJAX post the data to the friends API.
-    $.post("/api/friendsCloseness", userData, function (data) {
-        let myjson = JSON.stringify(data, null, 4);
-        console.log(myjson);
+// Capture the form inputs
+$("#submit").on("click", function (event) {
+    event.preventDefault();
 
-        // show in a popup window
-        var x = window.open();
-        x.document.open();
-        x.document.write('<html><body><pre>' + myjson + '</pre></body></html>');
-        x.document.close();
-    });
+    // If all required fields are filled
+    if (validateForm()) {
+        // Create an object for the user"s data
+        let surveyData = getFormData();
+
+        // AJAX post the data to the friends API.
+        $.post("/api/friends", surveyData, function (data) {
+
+            // Grab the result from the AJAX post so that the best match's name and photo are displayed.
+            $("#match-name").text(data.name);
+            $("#match-score").text(data.score);
+            $("#match-img").attr("src", data.photo_url);
+            $("#match-img").attr("alt", `${data.photo_url} Photo`);
+
+            // Show the bootstrap modal dialog with the best match
+            $("#results-modal-dialog").modal("toggle");
+
+        });
+    } else {
+        alert("Please fill out all fields before submitting!");
+    }
+});
+
+
+$("#submitShowALL").on("click", function (event) {
+    event.preventDefault();
+
+    // If all required fields are filled
+    if (validateForm()) {
+        // Create an object for the user"s data
+        let surveyData = getFormData();
+
+        // AJAX post the data all the friends and how close they are
+        $.post("/api/friendsCloseness", surveyData, function (data) {
+            let myjson = JSON.stringify(data, null, 4);
+            console.log(myjson);
+
+            // Grab the results and build this display list
+            let friendsDiv = "";
+            for (let i in data) {
+                friendsDiv += `
+                <div class="row">
+                    <div class="col-sm-4">${data[i].name}</div>
+                    <div class="col-sm-4">${data[i].score}</div>
+                    <div class="col-sm-4">
+                        <img width="64px" src="${data[i].photo_url}" alt="">
+                    </div>
+                </div>
+                `;
+            }
+
+            $(`#all-friends`).html(friendsDiv);
+            // Show the bootstrap modal dialog with the best match
+            $("#modal-dialog-list").modal("toggle");
+        });
+    } else {
+        alert("Please fill out all fields before submitting!");
+    }
 });
 
 // Load all the questions 
