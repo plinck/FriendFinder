@@ -1,5 +1,18 @@
 "use strict";
 
+// check for valid URL
+function isValidURL(str) {
+    let pattern = new RegExp('^((ft|htt)ps?:\\/\\/)?' + // protocol
+        '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name and extension
+        '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
+        '(\\:\\d+)?' + // port
+        '(\\/[-a-z\\d%@_.~+&:]*)*' + // path
+        '(\\?[;&a-z\\d%@_.,~+&:=-]*)?' + // query string
+        '(\\#[-a-z\\d_]*)?$', 'i'); // fragment locator
+
+    return (pattern.test(str));
+}
+
 // Form validation
 function validateForm() {
     let isValid = true;
@@ -44,24 +57,29 @@ $("#submit").on("click", function (event) {
 
     // If all required fields are filled
     if (validateForm()) {
-        // Create an object for the user"s data
-        let surveyData = getFormData();
 
-        // AJAX post the data to the friends API.
-        $.post("/api/friends", surveyData, function (data) {
+        if (isValidURL($("#photo").val())) {
+            // Create an object for the user"s data
+            let surveyData = getFormData();
 
-            // Grab the result from the AJAX post so that the best match's name and photo are displayed.
-            $("#match-name").text(data.name);
-            $("#match-score").text(data.score);
-            $("#match-img").attr("src", data.photo_url);
-            $("#match-img").attr("alt", `${data.photo_url} Photo`);
+            // AJAX post the data to the friends API.
+            $.post("/api/friends", surveyData, function (data) {
 
-            // Show the bootstrap modal dialog with the best match
-            $("#results-modal-dialog").modal("toggle");
+                // Grab the result from the AJAX post so that the best match's name and photo are displayed.
+                $("#match-name").text(data.name);
+                $("#match-score").text(data.score);
+                $("#match-img").attr("src", data.photo_url);
+                $("#match-img").attr("alt", `${data.photo_url} Photo`);
 
-        });
+                // Show the bootstrap modal dialog with the best match
+                $("#results-modal-dialog").modal("toggle");
+
+            });
+        } else {
+            alert("Please fill in Valid URL for photo");
+        }
     } else {
-        alert("Please fill out all fields before submitting!");
+        alert("Please fill out all fields");
     }
 });
 
@@ -71,18 +89,20 @@ $("#submitShowALL").on("click", function (event) {
 
     // If all required fields are filled
     if (validateForm()) {
-        // Create an object for the user"s data
-        let surveyData = getFormData();
 
-        // AJAX post the data all the friends and how close they are
-        $.post("/api/friendsCloseness", surveyData, function (data) {
-            let myjson = JSON.stringify(data, null, 4);
-            console.log(myjson);
+        if (isValidURL($("#photo").val())) {
+            // Create an object for the user"s data
+            let surveyData = getFormData();
 
-            // Grab the results and build this display list
-            let friendsDiv = "";
-            for (let i in data) {
-                friendsDiv += `
+            // AJAX post the data all the friends and how close they are
+            $.post("/api/friendsCloseness", surveyData, function (data) {
+                let myjson = JSON.stringify(data, null, 4);
+                console.log(myjson);
+
+                // Grab the results and build this display list
+                let friendsDiv = "";
+                for (let i in data) {
+                    friendsDiv += `
                 <div class="row">
                     <div class="col-sm-4">${data[i].name}</div>
                     <div class="col-sm-4">${data[i].score}</div>
@@ -91,12 +111,16 @@ $("#submitShowALL").on("click", function (event) {
                     </div>
                 </div>
                 `;
-            }
+                }
 
-            $(`#all-friends`).html(friendsDiv);
-            // Show the bootstrap modal dialog with the best match
-            $("#modal-dialog-list").modal("toggle");
-        });
+                $(`#all-friends`).html(friendsDiv);
+                // Show the bootstrap modal dialog with the best match
+                $("#modal-dialog-list").modal("toggle");
+            });
+
+        } else {
+            alert("Please fill in Valid URL for photo");
+        }
     } else {
         alert("Please fill out all fields before submitting!");
     }
