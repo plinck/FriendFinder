@@ -1,1 +1,1 @@
-heroku create paullinck-FriendFinder-server --remote paullinck-FriendFinder-server
+heroku create paullinck-friendfinder-server --remote paullinck-friendfinder-server

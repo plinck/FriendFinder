@@ -1,1 +1,1 @@
-git push paullinck-FriendFinder-server  master
+git push paullinck-friendfinder-server  master
