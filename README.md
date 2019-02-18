@@ -2,6 +2,8 @@
 
 ## Overview
 
+![Friend Finder](app/public/assets/images/FriendFinder275x200.png)
+
 This is a Friend Finder application.  It is not a dating app.  The user answers 10 survey questions and the backend compares those survey results to all the other people who filled out the survey and shows them their closest friend match.  It displays that match in a bootstrap model dialog.  There is also an option to display ALL the friends who filled out the survey in order of how close they are to you in survey results.  The lower the number / score, the closer the match they are to you.  That `score` for you vs a single freind is determined by subtracting each answer you picked from each answer a friend picked and taking the absolute value.  Those values are totalled for all the answers which gives your match a score.
 
 It uses HTML/CSS/Javascript and Bootstrap on the front end and Node/Express on the backend.  I have an in memory backend and an optional MySQL backend.  Two ES6 classes are swapped in and out to determine which backend storage is used.
@@ -20,7 +22,7 @@ It uses HTML/CSS/Javascript and Bootstrap on the front end and Node/Express on t
 
 ## Screenshots
 
-![ss1](images/ss1.png)
+![Friend Finder](app/public/assets/images/FriendFinder275x200.png)
 
 ### Design
 
