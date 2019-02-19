@@ -43,5 +43,3 @@ It uses HTML/CSS/Javascript and Bootstrap on the front end and Node/Express on t
 
 ## To Do
 
-* Get decent matches with valid picture URLs for every survey answered
-* Get app icon and add to my-portfolio
