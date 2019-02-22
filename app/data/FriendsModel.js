@@ -13,7 +13,7 @@ class FriendsModel {
     fetchFriends(aCallback) {
         let database = new Database();
         database.query(`SELECT * FROM friends`)
-            .then((err, rows) => {
+            .then((rows) => {
                 if (rows != undefined) {
                     // map the rows into the array of objects
                     this.friends = rows.map(r => ({
@@ -39,7 +39,7 @@ class FriendsModel {
             VALUES ("${profile.name}", "${profile.photo_url}", "${JSON.stringify(profile.answers)}");`;
 
         database.query(query_cmd)
-            .then((err, rows) => {
+            .then((rows) => {
                 this.friends.push(profile);
 
                 aCallback(this.friends);
